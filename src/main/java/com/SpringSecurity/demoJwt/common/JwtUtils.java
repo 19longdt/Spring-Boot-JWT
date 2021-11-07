@@ -17,10 +17,10 @@ public class JwtUtils {
     public static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
     // Đoạn JWT_SECRET này là bí mật, chỉ có phía server biết
-    @Value("${bezkoder.app.JWT_SECRET}")
+    @Value("${bezkoder.app.jwtSecret}")
     private String JWT_SECRET;
     @Value("${bezkoder.app.jwtExpirationMs}")
-    private String jwtExpirationMs;
+    private long jwtExpirationMs;
 
 
 
@@ -34,6 +34,12 @@ public class JwtUtils {
 
         // Tạo chuỗi json web token từ id của user.
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        System.out.println("Day la chuoi jwt: "+Jwts.builder()
+                .setSubject(userPrincipal.getUsername())
+                .setIssuedAt(date)
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
+                .compact());
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(date)
@@ -44,6 +50,11 @@ public class JwtUtils {
 
     // Lấy thông tin user từ jwt
     public String getUsernameFromJwtToken(String token) {
+        System.out.println("Day la thong tin user: "+Jwts.parser()
+                .setSigningKey(JWT_SECRET)
+                .parseClaimsJws(token)
+                .getBody().getSubject());
+
         return  Jwts.parser()
                 .setSigningKey(JWT_SECRET)
                 .parseClaimsJws(token)

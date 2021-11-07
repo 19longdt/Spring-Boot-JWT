@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+
+<head>
+    <meta charset="UTF-8">
+    <title>Spring Security</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+</head>
+<body>
+<h1>Cho nay de Login</h1>
+<form th:action="@{/signin}"th:object="${LoginRequest}"method="post">
+    <p>username: <input type="text"th:field="*{username}" />
+
+    <p>password: <input type="text"th:field="*{password}" />
+
+<!--    <h1 th:text="${sai}"></h1></p>-->
+    <p><button type="submit" class="btn btn-success">Login</button>  </p>
+</form>
+</body>
+</html>
